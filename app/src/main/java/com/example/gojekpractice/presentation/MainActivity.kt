@@ -8,9 +8,13 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.ConcatAdapter
+import androidx.recyclerview.widget.RecyclerView
 import com.example.gojekpractice.R
 import com.example.gojekpractice.databinding.ActivityMainBinding
 import com.example.gojekpractice.domain.StarWarsViewModel
+import com.example.gojekpractice.model.StarWarsPeopleData
 import kotlinx.coroutines.flow.collectLatest
 
 //https://harunwangereka.medium.com/android-paging-library-with-kotlin-coroutines-b96602e3fae3
@@ -25,7 +29,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         starWarPeopleAdapter = StarWarPeopleAdapter(this)
-        binding.rvStarWarPeople.adapter = starWarPeopleAdapter.withLoadStateHeaderAndFooter(
+        binding.rvStarWarPeople.adapter = starWarPeopleAdapter.withLoadStateAdapters(
             header = PagingLoadStateAdapter(starWarPeopleAdapter),
             footer = PagingLoadStateAdapter(starWarPeopleAdapter)
         )
@@ -53,5 +57,17 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    fun <T : Any, V : RecyclerView.ViewHolder> PagingDataAdapter<T, V>.withLoadStateAdapters(
+        header: PagingLoadStateAdapter<StarWarsPeopleData, StarWarPeopleAdapter.MyViewHolder> = PagingLoadStateAdapter(starWarPeopleAdapter),
+        footer: PagingLoadStateAdapter<StarWarsPeopleData, StarWarPeopleAdapter.MyViewHolder> = PagingLoadStateAdapter(starWarPeopleAdapter)
+    ): ConcatAdapter {
+        addLoadStateListener { loadStates ->
+            header.loadState = loadStates.refresh
+            footer.loadState = loadStates.append
+        }
+
+        return ConcatAdapter(header, this, footer)
     }
 }
