@@ -5,11 +5,12 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.example.gojekpractice.base.BaseViewModel
 import com.example.gojekpractice.model.StarWarsPeopleData
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class StarWarsViewModel : BaseViewModel() {
-
-    val repo: StarWarRepo = StarrWarRepoImpl()
+@HiltViewModel
+class StarWarsViewModel @Inject constructor(private val repo: StarWarRepo) : BaseViewModel() {
 
     init {
         getAllCharacters()

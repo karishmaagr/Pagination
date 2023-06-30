@@ -15,13 +15,18 @@ import com.example.gojekpractice.R
 import com.example.gojekpractice.databinding.ActivityMainBinding
 import com.example.gojekpractice.domain.StarWarsViewModel
 import com.example.gojekpractice.model.StarWarsPeopleData
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import javax.inject.Inject
 
 //https://harunwangereka.medium.com/android-paging-library-with-kotlin-coroutines-b96602e3fae3
 //https://proandroiddev.com/paging-3-easier-way-to-pagination-part-1-584cad1f4f61 -- Pagination 3
 //https://harunwangereka.medium.com/android-paging-library-with-kotlin-coroutines-b96602e3fae3 - Pagination
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
+
+    @Inject
     lateinit var starWarPeopleAdapter: StarWarPeopleAdapter
 
     private val viewModel: StarWarsViewModel by viewModels()
@@ -39,7 +44,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun setObserver() {
         with(starWarPeopleAdapter) {
-            binding.swipeRefresh.setOnRefreshListener { refresh() }
 
             lifecycleScope.launchWhenCreated {
                 viewModel.starWarFlow.collectLatest {
@@ -51,17 +55,16 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this@MainActivity, it, Toast.LENGTH_LONG).show()
             })
 
-            lifecycleScope.launchWhenCreated {
-                loadStateFlow.collectLatest {
-                    binding.swipeRefresh.isRefreshing = it.refresh is LoadState.Loading
-                }
-            }
         }
     }
 
     fun <T : Any, V : RecyclerView.ViewHolder> PagingDataAdapter<T, V>.withLoadStateAdapters(
-        header: PagingLoadStateAdapter<StarWarsPeopleData, StarWarPeopleAdapter.MyViewHolder> = PagingLoadStateAdapter(starWarPeopleAdapter),
-        footer: PagingLoadStateAdapter<StarWarsPeopleData, StarWarPeopleAdapter.MyViewHolder> = PagingLoadStateAdapter(starWarPeopleAdapter)
+        header: PagingLoadStateAdapter<StarWarsPeopleData, StarWarPeopleAdapter.MyViewHolder> = PagingLoadStateAdapter(
+            starWarPeopleAdapter
+        ),
+        footer: PagingLoadStateAdapter<StarWarsPeopleData, StarWarPeopleAdapter.MyViewHolder> = PagingLoadStateAdapter(
+            starWarPeopleAdapter
+        )
     ): ConcatAdapter {
         addLoadStateListener { loadStates ->
             header.loadState = loadStates.refresh

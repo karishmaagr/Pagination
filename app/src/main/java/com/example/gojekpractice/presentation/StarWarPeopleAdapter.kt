@@ -12,8 +12,10 @@ import com.bumptech.glide.Glide
 import com.example.gojekpractice.R
 import com.example.gojekpractice.base.CharacterComparator
 import com.example.gojekpractice.model.StarWarsPeopleData
+import dagger.hilt.android.qualifiers.ActivityContext
+import javax.inject.Inject
 
-class StarWarPeopleAdapter(val context: Context) :
+class StarWarPeopleAdapter @Inject constructor(@ActivityContext private val context: Context) :
     PagingDataAdapter<StarWarsPeopleData, StarWarPeopleAdapter.MyViewHolder>(CharacterComparator) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -41,7 +43,7 @@ class StarWarPeopleAdapter(val context: Context) :
         fun bind(item: StarWarsPeopleData?) {
             // Bind the item to the view
             name.text = item?.name
-            var url: Int =
+            val url: Int =
                 (item?.url?.removePrefix("https://swapi.dev/api/people/")?.removeSuffix("/")
                     ?: "1").toInt()
             Glide.with(context).load("https://i.pravatar.cc/150?img=${url}").circleCrop()
