@@ -22,6 +22,7 @@ import javax.inject.Inject
 //https://harunwangereka.medium.com/android-paging-library-with-kotlin-coroutines-b96602e3fae3
 //https://proandroiddev.com/paging-3-easier-way-to-pagination-part-1-584cad1f4f61 -- Pagination 3
 //https://harunwangereka.medium.com/android-paging-library-with-kotlin-coroutines-b96602e3fae3 - Pagination
+//https://github.com/metinozcura/RickAndMorty
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
@@ -35,7 +36,7 @@ class MainActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         starWarPeopleAdapter = StarWarPeopleAdapter(this)
         binding.rvStarWarPeople.adapter = starWarPeopleAdapter.withLoadStateAdapters(
-            header = PagingLoadStateAdapter(starWarPeopleAdapter),
+            header = PagingHeaderLoadStateAdapter(starWarPeopleAdapter),
             footer = PagingLoadStateAdapter(starWarPeopleAdapter)
         )
 
@@ -59,7 +60,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun <T : Any, V : RecyclerView.ViewHolder> PagingDataAdapter<T, V>.withLoadStateAdapters(
-        header: PagingLoadStateAdapter<StarWarsPeopleData, StarWarPeopleAdapter.MyViewHolder> = PagingLoadStateAdapter(
+        header: PagingHeaderLoadStateAdapter<StarWarsPeopleData, StarWarPeopleAdapter.MyViewHolder> = PagingHeaderLoadStateAdapter(
             starWarPeopleAdapter
         ),
         footer: PagingLoadStateAdapter<StarWarsPeopleData, StarWarPeopleAdapter.MyViewHolder> = PagingLoadStateAdapter(
