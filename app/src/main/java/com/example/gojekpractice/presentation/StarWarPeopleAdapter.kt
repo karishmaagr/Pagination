@@ -26,7 +26,6 @@ class StarWarPeopleAdapter(val context: Context) :
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         getItem(position)?.let {
             holder.bind(it)
-
         }
     }
 

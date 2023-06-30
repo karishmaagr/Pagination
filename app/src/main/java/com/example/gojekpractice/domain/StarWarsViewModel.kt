@@ -27,9 +27,6 @@ class StarWarsViewModel : BaseViewModel() {
         getAllCharacters()
     }
 
-    val pageNumber: LiveData<Int>
-        get() = _pageNumber
-
     private lateinit var _starWarFlow: Flow<PagingData<StarWarsPeopleData>>
     val starWarFlow: Flow<PagingData<StarWarsPeopleData>>
         get() = _starWarFlow

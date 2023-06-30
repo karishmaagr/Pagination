@@ -1,10 +1,13 @@
 package com.example.gojekpractice.presentation
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
 import com.example.gojekpractice.R
 import com.example.gojekpractice.databinding.ActivityMainBinding
 import com.example.gojekpractice.domain.StarWarsViewModel
@@ -32,9 +35,22 @@ class MainActivity : AppCompatActivity() {
 
     private fun setObserver() {
         with(starWarPeopleAdapter) {
+            binding.swipeRefresh.setOnRefreshListener { refresh() }
 
             lifecycleScope.launchWhenCreated {
-                viewModel.starWarFlow.collectLatest { submitData(it) }
+                viewModel.starWarFlow.collectLatest {
+                    submitData(it)
+                }
+            }
+
+            viewModel.errorMessage.observe(this@MainActivity, Observer {
+                Toast.makeText(this@MainActivity, it, Toast.LENGTH_LONG).show()
+            })
+
+            lifecycleScope.launchWhenCreated {
+                loadStateFlow.collectLatest {
+                    binding.swipeRefresh.isRefreshing = it.refresh is LoadState.Loading
+                }
             }
         }
     }

@@ -16,7 +16,7 @@ class StarWarDataSource(private val service: StartWarApi) :
 
             var nextPageNumber: Int? = null
             if (pagedResponse?.next != null) {
-                val uri = Uri.parse(pagedResponse.next)
+                var uri = Uri.parse(pagedResponse.next)
                 val nextPageQuery = uri.getQueryParameter("page")
                 nextPageNumber = nextPageQuery?.toInt()
             }
