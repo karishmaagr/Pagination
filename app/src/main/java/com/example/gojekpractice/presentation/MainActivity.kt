@@ -52,10 +52,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-            viewModel.errorMessage.observe(this@MainActivity, Observer {
-                Toast.makeText(this@MainActivity, it, Toast.LENGTH_LONG).show()
-            })
-
         }
     }
 
