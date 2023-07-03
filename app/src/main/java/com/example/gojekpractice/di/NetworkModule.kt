@@ -8,6 +8,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -29,15 +30,13 @@ class NetworkModule {
     fun provideOkHttpClient(
         @ApplicationContext context: Context, httpLoggingInterceptor: HttpLoggingInterceptor
     ): OkHttpClient = OkHttpClient.Builder().apply {
-        connectTimeout(2, TimeUnit.MINUTES).readTimeout(2, TimeUnit.MINUTES)
-            .writeTimeout(2, TimeUnit.MINUTES).retryOnConnectionFailure(true)
-            .addInterceptor(httpLoggingInterceptor)
+            addInterceptor(httpLoggingInterceptor)
     }.build()
 
     @Provides
     @Singleton
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder().apply {
-        baseUrl(BASE_URL)
+        baseUrl(BASE_URL.toHttpUrlOrNull()!!)
         addConverterFactory(GsonConverterFactory.create())
         client(okHttpClient)
     }.build()
