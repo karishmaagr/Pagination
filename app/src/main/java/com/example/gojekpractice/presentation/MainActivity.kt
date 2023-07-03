@@ -5,8 +5,10 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.paging.LoadState
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.ConcatAdapter
@@ -17,6 +19,7 @@ import com.example.gojekpractice.domain.StarWarsViewModel
 import com.example.gojekpractice.model.StarWarsPeopleData
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 //https://harunwangereka.medium.com/android-paging-library-with-kotlin-coroutines-b96602e3fae3
@@ -45,13 +48,14 @@ class MainActivity : AppCompatActivity() {
 
     private fun setObserver() {
         with(starWarPeopleAdapter) {
-
-            lifecycleScope.launchWhenCreated {
-                viewModel.starWarFlow.collectLatest {
-                    submitData(it)
+            lifecycleScope.launch {
+                repeatOnLifecycle(Lifecycle.State.STARTED){
+                    viewModel.starWarFlow.collectLatest {
+                        submitData(it)
+                    }
                 }
-            }
 
+            }
         }
     }
 

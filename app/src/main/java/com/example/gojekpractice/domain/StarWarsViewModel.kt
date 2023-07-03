@@ -7,6 +7,9 @@ import androidx.paging.cachedIn
 import com.example.gojekpractice.model.StarWarsPeopleData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -17,7 +20,7 @@ class StarWarsViewModel @Inject constructor(private val repo: StarWarRepo) : Vie
         getAllCharacters()
     }
 
-    private lateinit var _starWarFlow: Flow<PagingData<StarWarsPeopleData>>
+    private var _starWarFlow: MutableStateFlow<PagingData<StarWarsPeopleData>> = MutableStateFlow(PagingData.empty())
     val starWarFlow: Flow<PagingData<StarWarsPeopleData>>
         get() = _starWarFlow
 
@@ -25,7 +28,9 @@ class StarWarsViewModel @Inject constructor(private val repo: StarWarRepo) : Vie
         viewModelScope.launch {
             try {
                 val result = repo.getStarWarsCharacter().cachedIn(viewModelScope)
-                _starWarFlow = result
+                result.collectLatest {
+                    _starWarFlow.emit(it)
+                }
             } catch (ex: Exception) {
                 //handle error case
             }
