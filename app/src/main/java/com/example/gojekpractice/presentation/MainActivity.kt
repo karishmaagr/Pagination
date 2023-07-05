@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         starWarPeopleAdapter = StarWarPeopleAdapter(this)
         binding.rvStarWarPeople.adapter = starWarPeopleAdapter.withLoadStateAdapters(
-            header = PagingHeaderLoadStateAdapter(starWarPeopleAdapter),
+            header = FullScreenLoadStateAdapter(starWarPeopleAdapter),
             footer = PagingLoadStateAdapter(starWarPeopleAdapter)
         )
 
@@ -54,13 +54,12 @@ class MainActivity : AppCompatActivity() {
                         submitData(it)
                     }
                 }
-
             }
         }
     }
 
     fun <T : Any, V : RecyclerView.ViewHolder> PagingDataAdapter<T, V>.withLoadStateAdapters(
-        header: PagingHeaderLoadStateAdapter<StarWarsPeopleData, StarWarPeopleAdapter.MyViewHolder> = PagingHeaderLoadStateAdapter(
+        header: FullScreenLoadStateAdapter<StarWarsPeopleData, StarWarPeopleAdapter.MyViewHolder> = FullScreenLoadStateAdapter(
             starWarPeopleAdapter
         ),
         footer: PagingLoadStateAdapter<StarWarsPeopleData, StarWarPeopleAdapter.MyViewHolder> = PagingLoadStateAdapter(

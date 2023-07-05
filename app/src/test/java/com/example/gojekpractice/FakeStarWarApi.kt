@@ -29,7 +29,7 @@ class FakeStarWarApi : StartWarApiService {
             throw IOException(it)
         }
         val items = findStarWarResponse(pageNumber)
-        System.out.println("getStarWarCharacterResponse next is :: " + items.next)
+        println("getStarWarCharacterResponse next is :: " + items.next)
         return Response.success(items)
     }
 }
