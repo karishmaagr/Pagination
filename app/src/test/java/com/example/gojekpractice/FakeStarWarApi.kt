@@ -1,6 +1,6 @@
 package com.example.gojekpractice
 
-import com.example.gojekpractice.domain.StartWarApiService
+import com.example.gojekpractice.domain.StarWarApiService
 import com.example.gojekpractice.model.StarWarsResponse
 import retrofit2.Response
 import java.io.IOException
@@ -8,7 +8,7 @@ import java.io.IOException
 /**
  * implements the RedditApi with controllable requests
  */
-class FakeStarWarApi : StartWarApiService {
+class FakeStarWarApi : StarWarApiService {
     // subreddits keyed by name
     private val model = mutableMapOf<Int, StarWarsResponse>()
 

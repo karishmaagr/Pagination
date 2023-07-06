@@ -7,7 +7,7 @@ import com.example.gojekpractice.model.StarWarsPeopleData
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class StarrWarRepoImpl @Inject constructor(private val service : StartWarApiService) : StarWarRepo {
+class StarrWarRepoImpl @Inject constructor(private val service : StarWarApiService) : StarWarRepo {
 
     override suspend fun getStarWarsCharacter(): Flow<PagingData<StarWarsPeopleData>> =
         Pager(config = PagingConfig(pageSize = 10, prefetchDistance = 2),

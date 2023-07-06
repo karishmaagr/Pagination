@@ -5,7 +5,7 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.gojekpractice.model.StarWarsPeopleData
 
-class StarWarDataSource(private val service: StartWarApiService) :
+class StarWarDataSource(private val service: StarWarApiService) :
     PagingSource<Int, StarWarsPeopleData>() {
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, StarWarsPeopleData> {
         val pageNumber = params.key ?: 1
